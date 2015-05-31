@@ -1,0 +1,99 @@
+﻿@*@model IEnumerable<PMSite.Models.Person>*@
+@model PMSite.ViewModels.PeopleIndexData
+
+@{
+    ViewBag.Title = "People";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Firstname
+        </th>
+        <th>
+            Lastname
+        </th>
+        <th>
+            Person Type
+        </th>
+        <th>
+            Phone Number
+        </th>
+        <th>
+            Email Address
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.People)
+    {
+        string selectedRow = "";
+        if (item.ID == ViewBag.ID)
+        {
+            selectedRow = "success";
+        }
+
+        <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.Firstname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.ActionLink("Select", "Index", new { id = item.ID }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if (Model.Projects != null)
+{
+<h3>Projects for selected person:</h3>
+    <table class="table">
+        <tr>
+            <th>Project Name</th>
+            <th>Priority</th>
+            <th>Start Date</th>
+            <th>End Date</th>            
+        </tr>
+
+        @foreach (var item in Model.Projects)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(@item.Name, "Details", "Projects", new { id = item.ProjectID }, null)
+                </td>
+                <td>
+                    @item.Priority
+                </td>
+                <td>
+                    @String.Format("{0:dd/MM/yyyy}", item.StartTime.Date)
+                </td>
+                <td>
+                    @String.Format("{0:dd/MM/yyyy}", item.EndTime)
+                </td>
+     
+            </tr>
+        }
+    </table>
+}
+

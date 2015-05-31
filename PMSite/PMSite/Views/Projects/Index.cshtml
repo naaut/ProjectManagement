@@ -1,0 +1,119 @@
+﻿@model PMSite.ViewModels.PeopleIndexData
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Projects</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by Name or Description: @Html.TextBox("SearchString", ViewBag.CurrentSearch as string)
+        <input type="submit" value="Search" />
+
+        Select Manager: @Html.DropDownList("SelectedManager", "All")
+        <input type="submit" value="Filter" />
+
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            Action Company
+        </th>
+        <th>
+            Customer Company
+        </th>
+        <th>
+            Manager
+        </th>
+        <th>
+            @Html.ActionLink("Priority", "Index", new { sortOrder = ViewBag.PrioritySortParm, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Start Time", "Index", new { sortOrder = ViewBag.StartDateSortParm, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("End Time", "Index", new { sortOrder = ViewBag.EndDateSortParm, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Projects)
+{
+
+    string selectedRow = "";
+    if (item.ProjectID == ViewBag.ProjectID)
+    {
+        selectedRow = "success";
+    }
+    <tr class="@selectedRow">
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActionCompany.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerCompany.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Manager.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Priority)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndTime)
+        </td>
+        <td>
+            @Html.ActionLink("Select", "Index", new { id = item.ProjectID, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter }) |
+            @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ProjectID, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ProjectID, currentSearch = ViewBag.CurrentSearch, CurrentFilter = ViewBag.CurrentFilter })
+        </td>
+    </tr>
+}
+
+</table>
+
+@if (Model.People != null)
+{
+    <h3>Developers for selected project:</h3>
+    <table class="table">
+        <tr>
+            <th>Full Name</th>
+            <th>Email Address</th>
+            <th>Phone Number</th>
+        </tr>
+
+        @foreach (var item in Model.People)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(@item.FullName, "Details", "People", new { id = item.ID }, null)
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.PhoneNumber
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
