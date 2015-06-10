@@ -86,9 +86,20 @@ namespace PMSite.Controllers
             // if some project was selected
             if (id != null)
             {
-                ViewBag.ProjectID = id.Value;                               
-                // get all developer for selected project and add to viewModel
-                viewModel.People = viewModel.Projects.Where(i => i.ProjectID == id.Value).Single().Developers;               
+                ViewBag.ProjectID = id.Value;
+
+                try
+                {
+                    // get all developer for selected project and add to viewModel
+                    // can be null in case when list of projects filtered
+                    viewModel.People = viewModel.Projects.Where(i => i.ProjectID == id.Value).Single().Developers;
+                }
+                catch (Exception)
+                {                    
+                    // 
+                }         
+                
+                               
             }
 
             return View(viewModel);
